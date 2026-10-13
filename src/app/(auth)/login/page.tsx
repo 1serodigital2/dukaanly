@@ -40,7 +40,8 @@ const LoginPage = () => {
       return;
     }
 
-    router.replace("/dashboard");
+    router.replace("/admin/");
+    router.refresh();
   };
 
   const handleChange = (name: string, value: string) => {
