@@ -3,18 +3,20 @@ import { InputProps } from "@/src/types/form";
 export const Input = ({
   label,
   name,
-  type,
+  type = "text",
   required,
   onChange,
+  value,
 }: InputProps) => {
   return (
     <div className="flex flex-col w-full">
       {label && <label htmlFor={name}>{label}</label>}
       <input
         type={type}
-        disabled={required}
+        required={required}
         onChange={(e) => onChange(name, e.target.value)}
         className="border rounded"
+        value={value}
       />
     </div>
   );
