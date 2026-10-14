@@ -1,7 +1,8 @@
 // "use client";
 
-import { getStore } from "@/src/features/shops/api";
+// import { getStore } from "@/src/features/shops/api";
 // import { useGetStore } from "@/src/features/shops/queries";
+import { createClient } from "@/src/lib/supabase/server";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -11,13 +12,64 @@ const StorePage = async ({ params }: PageProps) => {
   const slug = resolvedParams.slug;
   console.log("[StorePage]", slug);
 
+  const supabase = createClient();
+
+  const { data, error } = await (await supabase)
+    .from("shops")
+    .select("*")
+    .eq("slug", slug);
+
+  if (error) {
+    console.error("something went wrong", error);
+  }
+  // return data;
+
   // const { data, isPending, isError, error } = useGetStore(slug);
-  const data = getStore(slug);
+  // const data = getStore(slug);
 
   console.log("[StorePage] data", data);
+
+  if (data?.length === 0 || !data) return <p>Data not found</p>;
+
   return (
     <>
-      <h1>Store page {slug}</h1>
+      <h1 className="mb-5">Store page</h1>
+      <div className="border rounded-xl p-6">
+        <div className="mb-5">
+          <div>
+            <small>Logo</small>
+          </div>
+          <div className="p-3 border-dashed border rounded-xl w-max">
+            <img
+              src="https://placehold.co/200x200"
+              alt=""
+              className="rounded-xl"
+            />
+          </div>
+        </div>
+        <div>
+          <div>
+            <small>Shop name</small>
+          </div>
+          <div className="mb-4">{data[0].name}</div>
+          <div>
+            <small>email</small>
+          </div>
+          <div className="mb-4">{data[0].email}</div>
+          <div>
+            <small>Phone</small>
+          </div>
+          <div className="mb-4">{data[0].phone}</div>
+          <div>
+            <small>Shop slug</small>
+          </div>
+          <div className="mb-4">{data[0].slug}</div>
+          <div>
+            <small>Shop address</small>
+          </div>
+          <div className="mb-4">{data[0].address}</div>
+        </div>
+      </div>
     </>
   );
 };
