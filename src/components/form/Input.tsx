@@ -15,7 +15,7 @@ export const Input = ({
         type={type}
         required={required}
         onChange={(e) => onChange(name, e.target.value)}
-        className="border rounded"
+        className="border rounded min-h-10 px-3"
         value={value}
       />
     </div>
