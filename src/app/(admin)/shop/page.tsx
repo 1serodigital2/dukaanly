@@ -1,107 +1,34 @@
-"use client";
+import ShopList from "@/src/components/shops/ShopList";
+import { createClient } from "@/src/lib/supabase/server";
+import { redirect } from "next/navigation";
 
-import { useState, useEffect } from "react";
+const ShopPage = async () => {
+  const supabase = await createClient();
 
-import { Input } from "@/src/components/form/Input";
+  // 2. Fetch the authenticated user securely from Supabase
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser();
 
-import { useCreateStore } from "@/src/features/shops/queries";
+  // 3. Handle unauthorized state or grab the UUID
+  if (error || !user) {
+    redirect("/login");
+  }
 
-const initialState = {
-  shopName: "",
-  email: "",
-  phone: "",
-};
-const ShopPage = () => {
-  const [inputValues, setInputValues] = useState(initialState);
-  const [submitMessage, setSubmitMessage] = useState("");
-  const { mutate, isPending, error, isError, isSuccess } = useCreateStore();
+  console.log("ShopPage user data", user);
 
-  const handleChange = (name: string, value: string) => {
-    setInputValues((prevState) => {
-      return {
-        ...prevState,
-        [name]: value,
-      };
-    });
-  };
+  const { data, error: shopError } = await supabase
+    .from("shops")
+    .select("*")
+    .eq("created_by", user.id);
 
-  const handleSubmit = (e: React.SubmitEvent) => {
-    e.preventDefault();
-
-    const shopName = inputValues.shopName.trim();
-
-    if (!shopName) {
-      console.error("Shop name is required");
-      return;
-    }
-
-    const shopSlug = shopName
-      .toLowerCase()
-      .replace(/[^a-z0-9\s-]/g, "")
-      .replace(/\s+/g, "-")
-      .replace(/-+/g, "-");
-
-    const storeData = {
-      shopName,
-      shopSlug,
-      email: inputValues.email,
-      phone: inputValues.phone,
-    };
-
-    mutate(storeData);
-  };
-
-  useEffect(() => {
-    if (isSuccess) {
-      setInputValues(initialState);
-      setSubmitMessage("Form Submitted successfully");
-    }
-  }, [isSuccess]);
-
-  useEffect(() => {
-    if (submitMessage) {
-      setTimeout(() => {
-        setSubmitMessage("");
-      }, 5000);
-    }
-  }, [submitMessage]);
+  console.log("[Shoppage] shop data", data);
 
   return (
     <>
-      <h1 className="mb-4">Shop page</h1>
-      <form action="" className="rounded-xl p-4 border" onSubmit={handleSubmit}>
-        <div className="flex gap-4">
-          <Input
-            label="Shop Name"
-            name="shopName"
-            required
-            onChange={handleChange}
-            value={inputValues["shopName"]}
-          />
-          <Input
-            label="Contact Email"
-            name="email"
-            type="email"
-            onChange={handleChange}
-            value={inputValues["email"]}
-          />
-          <Input
-            label="Mobile Number"
-            name="phone"
-            type="tel"
-            onChange={handleChange}
-            value={inputValues["phone"]}
-          />
-        </div>
-        <button
-          className="border px-4 py-2 rounded cursor-pointer mt-5"
-          disabled={isPending}
-        >
-          {isPending ? "Submitting" : "Submit"}
-        </button>
-      </form>
-      {isError && <p>{error.message}</p>}
-      {submitMessage && <p>{submitMessage}</p>}
+      <h1 className="mb-5">Shop page</h1>
+      <ShopList data={data} />
     </>
   );
 };

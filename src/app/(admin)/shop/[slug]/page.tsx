@@ -3,6 +3,7 @@
 // import { getStore } from "@/src/features/shops/api";
 // import { useGetStore } from "@/src/features/shops/queries";
 import { createClient } from "@/src/lib/supabase/server";
+import Link from "next/link";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -33,8 +34,9 @@ const StorePage = async ({ params }: PageProps) => {
 
   return (
     <>
-      <h1 className="mb-5">Store page</h1>
-      <div className="border rounded-xl p-6">
+      <h1 className="mb-5">Create Store</h1>
+      <div className="border rounded-xl p-6 relative">
+        <Link href={`${slug}/edit`}>Edit</Link>
         <div className="mb-5">
           <div>
             <small>Logo</small>
