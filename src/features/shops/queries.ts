@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createStore, getStore, updateStore } from "./api";
+import { ShopCreationData, ShopData } from "./types";
 
 export const useCreateStore = () => {
   const queryClient = useQueryClient();
@@ -24,7 +25,7 @@ export const useGetStore = (id: number) => {
 export const useUpdateStore = (id: number) => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (data) => updateStore(id, data),
+    mutationFn: (data: ShopData) => updateStore(id, data),
     onSuccess: async () => {
       await queryClient.invalidateQueries({
         queryKey: ["shops", id],

@@ -54,5 +54,5 @@ export const updateStore = async (id: number, storeData: string | any) => {
 
     throw error;
   }
-  return { sucess: true, data };
+  return { success: true, data };
 };

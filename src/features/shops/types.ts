@@ -4,6 +4,12 @@ export interface ShopCreationData {
   email: string;
   phone: string;
 }
+export interface ShopData {
+  shopName: string;
+  shopSlug?: string;
+  email: string;
+  phone: string;
+}
 
 export interface ShopFormProps {
   handleSubmit: (e: React.SubmitEvent) => void;
