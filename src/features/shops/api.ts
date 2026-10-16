@@ -31,10 +31,28 @@ export const getStore = async (slug: string) => {
   const { data, error } = await supabase
     .from("shops")
     .select("*")
-    .eq("slug", slug);
+    .eq("slug", slug)
+    .maybeSingle();
 
   if (error) {
     console.error("something went wrong", error);
   }
   return data;
+};
+
+export const updateStore = async (id: number, storeData: string | any) => {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("shops")
+    .update(storeData)
+    .eq("id", id)
+    .select()
+    .maybeSingle();
+
+  if (error) {
+    console.error("[updateStore] has error", error);
+
+    return { success: false, error };
+  }
+  return { sucess: true, data };
 };
