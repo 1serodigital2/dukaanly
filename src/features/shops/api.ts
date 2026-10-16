@@ -25,13 +25,13 @@ export const createStore = async (storeData: ShopCreationData) => {
   return data;
 };
 
-export const getStore = async (slug: string) => {
+export const getStore = async (id: number) => {
   const supabase = createClient();
 
   const { data, error } = await supabase
     .from("shops")
     .select("*")
-    .eq("slug", slug)
+    .eq("id", id)
     .maybeSingle();
 
   if (error) {
@@ -52,7 +52,7 @@ export const updateStore = async (id: number, storeData: string | any) => {
   if (error) {
     console.error("[updateStore] has error", error);
 
-    return { success: false, error };
+    throw error;
   }
   return { sucess: true, data };
 };

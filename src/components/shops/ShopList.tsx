@@ -5,7 +5,7 @@ const ShopList = ({ data }) => {
     <div className="grid grid-cols-5 gap-4">
       {data.map((store) => (
         <Link
-          href={`/shop/${store.slug}`}
+          href={`/shop/${store.id}`}
           className="border rounded-xl p-4"
           key={store.id}
         >

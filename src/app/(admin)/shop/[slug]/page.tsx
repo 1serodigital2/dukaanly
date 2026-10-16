@@ -1,7 +1,3 @@
-// "use client";
-
-// import { getStore } from "@/src/features/shops/api";
-// import { useGetStore } from "@/src/features/shops/queries";
 import { createClient } from "@/src/lib/supabase/server";
 import Link from "next/link";
 
@@ -18,15 +14,11 @@ const StorePage = async ({ params }: PageProps) => {
   const { data, error } = await (await supabase)
     .from("shops")
     .select("*")
-    .eq("slug", slug);
+    .eq("id", slug);
 
   if (error) {
     console.error("something went wrong", error);
   }
-  // return data;
-
-  // const { data, isPending, isError, error } = useGetStore(slug);
-  // const data = getStore(slug);
 
   console.log("[StorePage] data", data);
 

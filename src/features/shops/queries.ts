@@ -14,21 +14,24 @@ export const useCreateStore = () => {
   });
 };
 
-export const useGetStore = (slug: string) => {
+export const useGetStore = (id: number) => {
   return useQuery({
-    queryKey: ["shops", slug],
-    queryFn: () => getStore(slug),
+    queryKey: ["shops", id],
+    queryFn: () => getStore(id),
   });
 };
 
-export const useUpdateStore = (id: number, data: string | any) => {
+export const useUpdateStore = (id: number) => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: () => updateStore(id, data),
+    mutationFn: (data) => updateStore(id, data),
     onSuccess: async () => {
       await queryClient.invalidateQueries({
         queryKey: ["shops", id],
       });
+    },
+    onError: (error) => {
+      console.error("Somethign went wrong while updating", error);
     },
   });
 };
