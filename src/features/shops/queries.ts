@@ -17,10 +17,18 @@ export const useCreateStore = () => {
 
 export const useGetStore = (id: number) => {
   return useQuery({
-    queryKey: ["shops", id],
+    queryKey: ["shop", id],
     queryFn: () => getStore(id),
   });
 };
+
+// export const useGetStores = (id: number) => {
+//   return useQuery({
+//     queryKey: ["shops"],
+//     queryFn: () => getStore(id),
+//     enabled
+//   });
+// };
 
 export const useUpdateStore = (id: number) => {
   const queryClient = useQueryClient();

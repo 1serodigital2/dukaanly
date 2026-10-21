@@ -40,6 +40,21 @@ export const getStore = async (id: number) => {
   return data;
 };
 
+export const getStores = async (id: string) => {
+  const supabase = createClient();
+
+  const { data, error } = await supabase
+    .from("shops")
+    .select("*")
+    .eq("created_by", id)
+    .maybeSingle();
+
+  if (error) {
+    console.error("something went wrong", error);
+  }
+  return data;
+};
+
 export const updateStore = async (id: number, storeData: string | any) => {
   const supabase = createClient();
   const { data, error } = await supabase
