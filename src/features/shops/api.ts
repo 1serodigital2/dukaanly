@@ -41,13 +41,15 @@ export const getStore = async (id: number) => {
 };
 
 export const getStores = async (id: string) => {
+  console.log("[getStores] triggered with id", id);
+
   const supabase = createClient();
 
   const { data, error } = await supabase
     .from("shops")
     .select("*")
-    .eq("created_by", id)
-    .maybeSingle();
+    .eq("created_by", id);
+    // .maybeSingle();
 
   if (error) {
     console.error("something went wrong", error);

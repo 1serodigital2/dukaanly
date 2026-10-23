@@ -12,8 +12,17 @@ const Header = () => {
 
   const supabase = createClient();
 
-  const { data, error: storesError, isPending, isError } = useStores();
-  console.log("[Header] data", data);
+  const { user } = useAuth();
+  const userId = user?.id;
+
+  const {
+    data: stores,
+    error: storesError,
+    isPending,
+    isError,
+  } = useStores(userId);
+
+  console.log("[Header] data", stores);
   console.log("[Header] error", error);
 
   const handleLogout = async () => {
@@ -33,7 +42,15 @@ const Header = () => {
   return (
     <>
       <header className="flex justify-between px-5 py-3 border-b">
-        <div></div>
+        <div>
+          {stores && (
+            <select name="" id="">
+              {stores.map((store) => (
+                <option key={store.id}>{store.name}</option>
+              ))}
+            </select>
+          )}
+        </div>
         <button
           className="cursor-pointer"
           onClick={handleLogout}

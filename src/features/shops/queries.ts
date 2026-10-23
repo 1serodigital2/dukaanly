@@ -23,13 +23,16 @@ export const useStore = (id: number) => {
   });
 };
 
-export const useStores = () => {
-  const { user } = useAuth();
-  const userId = user?.id;
+export const useStores = (userId: string) => {
+  // const { user } = useAuth();
+  // const userId = user?.id;
+
+  console.log("[useStores] user", userId);
+
   return useQuery({
     queryKey: ["shops"],
     queryFn: () => getStores(userId),
-    enabled: !user?.id,
+    enabled: !!userId,
   });
 };
 
