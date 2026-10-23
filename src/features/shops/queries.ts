@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createStore, getStore, updateStore } from "./api";
+import { createStore, getStore, getStores, updateStore } from "./api";
 import { ShopCreationData, ShopData } from "./types";
+import { useAuth } from "@/src/context/AuthContext";
 
 export const useCreateStore = () => {
   const queryClient = useQueryClient();
@@ -15,20 +16,22 @@ export const useCreateStore = () => {
   });
 };
 
-export const useGetStore = (id: number) => {
+export const useStore = (id: number) => {
   return useQuery({
     queryKey: ["shop", id],
     queryFn: () => getStore(id),
   });
 };
 
-// export const useGetStores = (id: number) => {
-//   return useQuery({
-//     queryKey: ["shops"],
-//     queryFn: () => getStore(id),
-//     enabled
-//   });
-// };
+export const useStores = () => {
+  const { user } = useAuth();
+  const userId = user?.id;
+  return useQuery({
+    queryKey: ["shops"],
+    queryFn: () => getStores(userId),
+    enabled: !user?.id,
+  });
+};
 
 export const useUpdateStore = (id: number) => {
   const queryClient = useQueryClient();

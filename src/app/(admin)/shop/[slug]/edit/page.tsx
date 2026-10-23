@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 
 import {
   useCreateStore,
-  useGetStore,
+  useStore,
   useUpdateStore,
 } from "@/src/features/shops/queries";
 import ShopForm from "@/src/components/shops/ShopForm";
@@ -24,7 +24,7 @@ const ShopEditPage = () => {
     isPending: storeIsPending,
     isError: storeIsError,
     error: storeError,
-  } = useGetStore(slug as number);
+  } = useStore(slug as number);
 
   console.log("Store data", storeData);
 
