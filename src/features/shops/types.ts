@@ -20,3 +20,14 @@ export interface ShopFormProps {
   error: Error | null;
   submitMessage: string;
 }
+
+export interface ShopCardData {
+  id: number;
+  phone: string;
+  email: string;
+  name: string;
+}
+
+export interface ShopCardProps {
+  data: ShopCardData[];
+}

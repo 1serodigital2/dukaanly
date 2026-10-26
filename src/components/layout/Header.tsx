@@ -4,26 +4,17 @@ import { createClient } from "@/src/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/src/context/AuthContext";
 import { useStore, useStores } from "@/src/features/shops/queries";
+import useShop from "@/src/app/hooks/useStore";
 
 const Header = () => {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const router = useRouter();
-
-  const supabase = createClient();
-
-  const { user } = useAuth();
-  const userId = user?.id;
-
-  const {
-    data: stores,
-    error: storesError,
-    isPending,
-    isError,
-  } = useStores(userId);
+  const { getAllStores } = useShop();
+  const { error, stores, setLoading, setError, loading } = getAllStores();
 
   console.log("[Header] data", stores);
   console.log("[Header] error", error);
+
+  const router = useRouter();
+  const supabase = createClient();
 
   const handleLogout = async () => {
     setLoading(true);

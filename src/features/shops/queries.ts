@@ -50,3 +50,17 @@ export const useUpdateStore = (id: number) => {
     },
   });
 };
+
+export const useDeleteStore = (id: string) => {
+  return useMutation({
+    mutationFn: deleteStore(),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ["shops", id],
+      });
+    },
+    onError: (error) => {
+      console.error("Somethign went wrong while deleting", error);
+    },
+  });
+};
