@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { useDeleteStore } from "@/src/features/shops/queries";
 import { ShopCardData, ShopCardProps } from "@/src/features/shops/types";
 import { EllipsisVertical } from "lucide-react";
@@ -8,9 +9,17 @@ import Link from "next/link";
 import type { MouseEvent } from "react";
 
 const ShopList = ({ data }: ShopCardProps) => {
-  const { mutate, isPending, isError, error, isSuccess } = useDeleteStore();
+  const router = useRouter();
 
-  let deleteId = 0;
+  // let deleteId = 0;
+  const {
+    mutate,
+    isPending,
+    isError,
+    error,
+    isSuccess,
+    variables: deleteId,
+  } = useDeleteStore();
   const handleClick = (e: MouseEvent<HTMLLIElement>) => {
     e.preventDefault();
     console.log("[handleClick] clicked edit");
@@ -19,8 +28,12 @@ const ShopList = ({ data }: ShopCardProps) => {
   const handleDelete = (e: MouseEvent<HTMLLIElement>, id: number) => {
     e.preventDefault();
     console.log("[delete clicked]");
-    deleteId = id;
-    mutate(id);
+    // deleteId = id;
+    mutate(id, {
+      onSuccess: () => {
+        router.refresh();
+      },
+    });
   };
 
   return (
@@ -44,7 +57,7 @@ const ShopList = ({ data }: ShopCardProps) => {
             <ul className="border px-4 py-1 rounded flex flex-col gap-2">
               <li onClick={handleClick}>Edit</li>
               <li onClick={(e) => handleDelete(e, store.id)}>
-                {isPending && store.id == deleteId ? "Deleting..." : "Delete"}
+                {isPending && store.id === deleteId ? "Deleting..." : "Delete"}
               </li>
             </ul>
           </div>
