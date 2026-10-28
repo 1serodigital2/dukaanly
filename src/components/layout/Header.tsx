@@ -10,9 +10,6 @@ const Header = () => {
   const { getAllStores } = useShop();
   const { error, stores, setLoading, setError, loading } = getAllStores();
 
-  console.log("[Header] data", stores);
-  console.log("[Header] error", error);
-
   const router = useRouter();
   const supabase = createClient();
 

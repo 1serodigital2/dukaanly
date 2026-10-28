@@ -49,7 +49,7 @@ export const getStores = async (id: string) => {
     .from("shops")
     .select("*")
     .eq("created_by", id);
-    // .maybeSingle();
+  // .maybeSingle();
 
   if (error) {
     console.error("something went wrong", error);
@@ -69,6 +69,21 @@ export const updateStore = async (id: number, storeData: string | any) => {
   if (error) {
     console.error("[updateStore] has error", error);
 
+    throw error;
+  }
+  return { success: true, data };
+};
+
+export const deleteStore = async (id: number) => {
+  const supabase = createClient();
+
+  const { data, error } = await supabase.from("shops").delete().eq("id", id);
+
+  if (error) {
+    console.log(
+      "[deleteStore] something went wrong while deleting store",
+      error,
+    );
     throw error;
   }
   return { success: true, data };

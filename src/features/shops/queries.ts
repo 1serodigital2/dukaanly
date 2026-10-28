@@ -1,5 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createStore, getStore, getStores, updateStore } from "./api";
+import {
+  createStore,
+  deleteStore,
+  getStore,
+  getStores,
+  updateStore,
+} from "./api";
 import { ShopCreationData, ShopData } from "./types";
 import { useAuth } from "@/src/context/AuthContext";
 
@@ -51,12 +57,14 @@ export const useUpdateStore = (id: number) => {
   });
 };
 
-export const useDeleteStore = (id: string) => {
+export const useDeleteStore = () => {
+  const queryClient = useQueryClient();
+
   return useMutation({
-    mutationFn: deleteStore(),
+    mutationFn: (id: number) => deleteStore(id),
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: ["shops", id],
+        queryKey: ["shops"],
       });
     },
     onError: (error) => {
