@@ -5,6 +5,7 @@ import { ReactNode } from "react";
 import Header from "@/src/components/layout/Header";
 import Sidebar from "@/src/components/layout/Sidebar";
 import { AuthProvider } from "@/src/context/AuthContext";
+import LogoutButton from "@/src/components/profile/Logout";
 
 const DashboardLayout = async ({ children }: { children: ReactNode }) => {
   const supabase = await createClient();
@@ -20,13 +21,11 @@ const DashboardLayout = async ({ children }: { children: ReactNode }) => {
 
   return (
     <AuthProvider initialUser={user}>
-      <div className="flex min-h-screen">
-        <Sidebar />
-        <main className="flex-1">
-          <Header />
-          <div className="p-5">{children}</div>
-        </main>
+      <div className="border-b ">
+        <div></div>
+        <LogoutButton />
       </div>
+      {children}
     </AuthProvider>
   );
 };

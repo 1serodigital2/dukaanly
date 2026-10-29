@@ -10,10 +10,10 @@ const ShopPage = async () => {
   }
 
   return (
-    <>
+    <div className="p-5">
       <h1 className="mb-5">Shop page</h1>
       <ShopList data={data || []} />
-    </>
+    </div>
   );
 };
 export default ShopPage;

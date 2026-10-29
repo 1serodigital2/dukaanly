@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/src/context/AuthContext";
 import { useStore, useStores } from "@/src/features/shops/queries";
 import useShop from "@/src/app/hooks/useStore";
+import LogoutButton from "../profile/Logout";
 
 const Header = () => {
   const { getAllStores } = useShop();
@@ -39,13 +40,14 @@ const Header = () => {
             </select>
           )}
         </div>
-        <button
+        {/* <button
           className="cursor-pointer"
           onClick={handleLogout}
           disabled={loading}
         >
           {loading ? "Processing..." : "Logout"}
-        </button>
+        </button> */}
+        <LogoutButton />
       </header>
       {error && <p>{error}</p>}
     </>

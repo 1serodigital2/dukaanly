@@ -40,7 +40,7 @@ const LoginPage = () => {
       return;
     }
 
-    router.replace("/admin/");
+    router.replace("/shop/");
     router.refresh();
   };
 
