@@ -1,8 +1,13 @@
 import ShopList from "@/src/components/shops/ShopList";
 import { getStores } from "@/src/features/shops/server-api";
+import { redirect } from "next/navigation";
 
 const ShopPage = async () => {
   const data = await getStores();
+
+  if (data == undefined || data?.length <= 0) {
+    redirect("/shop/add/");
+  }
 
   return (
     <>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useDeleteStore } from "@/src/features/shops/queries";
 import { ShopCardData, ShopCardProps } from "@/src/features/shops/types";
@@ -11,7 +11,17 @@ import type { MouseEvent } from "react";
 const ShopList = ({ data }: ShopCardProps) => {
   const router = useRouter();
 
-  // let deleteId = 0;
+  const [activeStoreOption, setActiveStoreOption] = useState<number | null>(0);
+
+  const handleStoreOption = (
+    e: MouseEvent<HTMLButtonElement>,
+    storeId: number,
+  ) => {
+    e.preventDefault();
+
+    setActiveStoreOption((prevId) => (prevId === storeId ? null : storeId));
+  };
+
   const {
     mutate,
     isPending,
@@ -20,20 +30,25 @@ const ShopList = ({ data }: ShopCardProps) => {
     isSuccess,
     variables: deleteId,
   } = useDeleteStore();
-  const handleClick = (e: MouseEvent<HTMLLIElement>) => {
+
+  const handleClick = (e: MouseEvent<HTMLLIElement>, id: number) => {
     e.preventDefault();
-    console.log("[handleClick] clicked edit");
+    // console.log("[handleClick] clicked edit");
+    const editSlug = `/shop/${id}/edit`;
+    router.push(editSlug);
   };
 
   const handleDelete = (e: MouseEvent<HTMLLIElement>, id: number) => {
     e.preventDefault();
     console.log("[delete clicked]");
     // deleteId = id;
-    mutate(id, {
-      onSuccess: () => {
-        router.refresh();
-      },
-    });
+    if (confirm("Are you sure to delete this store?") === true) {
+      mutate(id, {
+        onSuccess: () => {
+          router.refresh();
+        },
+      });
+    }
   };
 
   return (
@@ -50,16 +65,23 @@ const ShopList = ({ data }: ShopCardProps) => {
             <li>{store.phone}</li>
             <li>{store.email}</li>
           </ul>
-          <div className="absolute right-3 top-3">
-            <button>
+          <div className="absolute right-3 top-3 text-right">
+            <button
+              onClick={(e) => handleStoreOption(e, store.id)}
+              className="border py-1 px-2 rounded cursor-pointer"
+            >
               <EllipsisVertical />
             </button>
-            <ul className="border px-4 py-1 rounded flex flex-col gap-2">
-              <li onClick={handleClick}>Edit</li>
-              <li onClick={(e) => handleDelete(e, store.id)}>
-                {isPending && store.id === deleteId ? "Deleting..." : "Delete"}
-              </li>
-            </ul>
+            {activeStoreOption === store.id && (
+              <ul className="border px-4 py-1 rounded flex flex-col gap-2">
+                <li onClick={(e) => handleClick(e, store.id)}>Edit</li>
+                <li onClick={(e) => handleDelete(e, store.id)}>
+                  {isPending && store.id === deleteId
+                    ? "Deleting..."
+                    : "Delete"}
+                </li>
+              </ul>
+            )}
           </div>
         </Link>
       ))}
