@@ -5,7 +5,8 @@ import { ReactNode } from "react";
 import Header from "@/src/components/layout/Header";
 import Sidebar from "@/src/components/layout/Sidebar";
 import { AuthProvider } from "@/src/context/AuthContext";
-import LogoutButton from "@/src/components/profile/Logout";
+// import LogoutButton from "@/src/components/profile/Logout";
+import AdminHeader from "@/src/components/layout/AdminHeader";
 
 const DashboardLayout = async ({ children }: { children: ReactNode }) => {
   const supabase = await createClient();
@@ -21,10 +22,7 @@ const DashboardLayout = async ({ children }: { children: ReactNode }) => {
 
   return (
     <AuthProvider initialUser={user}>
-      <div className="border-b ">
-        <div></div>
-        <LogoutButton />
-      </div>
+      <AdminHeader />
       {children}
     </AuthProvider>
   );

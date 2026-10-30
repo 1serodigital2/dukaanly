@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import { createClient } from "@/src/lib/supabase/client";
 import { useRouter } from "next/navigation";
@@ -10,26 +12,41 @@ const LogoutButton = () => {
   const [loading, setLoading] = useState(false);
 
   const handleLogout = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      setErrorMsg(error?.message || "Something went wrong");
-      console.log("[handleLogout]", errorMsg);
+    try {
+      setLoading(true);
+      setErrorMsg("");
 
-      return;
+      const { error } = await supabase.auth.signOut();
+
+      if (error) {
+        throw error;
+      }
+
+      router.replace("/login/");
+      router.refresh();
+    } catch (error) {
+      console.error("[handleLogout]", error);
+
+      setErrorMsg(
+        error instanceof Error ? error.message : "Something went wrong",
+      );
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
-    setErrorMsg("");
-    router.replace("/login/");
   };
 
   return (
-    <button
-      className="cursor-pointer"
-      onClick={handleLogout}
-      disabled={loading}
-    >
-      {loading ? "Processing..." : "Logout"}
-    </button>
+    <div>
+      <button
+        className="cursor-pointer"
+        onClick={handleLogout}
+        disabled={loading}
+      >
+        {loading ? "Processing..." : "Logout"}
+      </button>
+
+      {errorMsg && <p className="text-red-500">{errorMsg}</p>}
+    </div>
   );
 };
 
