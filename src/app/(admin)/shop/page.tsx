@@ -1,3 +1,4 @@
+import AdminHeader from "@/src/components/layout/AdminHeader";
 import ShopList from "@/src/components/shops/ShopList";
 import { getStores } from "@/src/features/shops/server-api";
 import { redirect } from "next/navigation";
@@ -10,10 +11,13 @@ const ShopPage = async () => {
   }
 
   return (
-    <div className="p-5">
-      <h1 className="mb-5">Shop page</h1>
-      <ShopList data={data || []} />
-    </div>
+    <>
+      <AdminHeader />
+      <div className="p-5">
+        <h1 className="mb-5">Shop page</h1>
+        <ShopList data={data || []} />
+      </div>
+    </>
   );
 };
 export default ShopPage;

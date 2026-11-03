@@ -22,7 +22,7 @@ const DashboardLayout = async ({ children }: { children: ReactNode }) => {
 
   return (
     <AuthProvider initialUser={user}>
-      <AdminHeader />
+      {/* <AdminHeader /> */}
       {children}
     </AuthProvider>
   );
