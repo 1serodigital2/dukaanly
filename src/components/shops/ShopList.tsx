@@ -51,6 +51,12 @@ const ShopList = ({ data }: ShopCardProps) => {
     }
   };
 
+  const setCookie = (name: string, value: string | number, daysToLive: number) => {
+    const encodedValue = encodeURIComponent(value);
+    const maxAge = daysToLive * 24 * 60 * 60;
+    document.cookie = `${name}=${encodedValue}; max-age=${maxAge}; path=/; SameSite=Lax`;
+  }
+
   return (
     <div className="grid grid-cols-5 gap-4">
       {isError && <p>{error.message}</p>}
@@ -59,6 +65,12 @@ const ShopList = ({ data }: ShopCardProps) => {
           href={`/shop/${store.id}`}
           className="border rounded-xl p-4 relative"
           key={store.id}
+          onClick={ (e) => {
+            e.preventDefault();
+            setCookie("ActiveStore", store.id, 30);
+            const storeSlug = `/shop/${store.id}`;
+            router.push(storeSlug)
+          }}
         >
           <h3>{store.name}</h3>
           <ul>

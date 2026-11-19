@@ -1,9 +1,5 @@
 "use client";
-import { useContext, useState } from "react";
-import { createClient } from "@/src/lib/supabase/client";
-import { useRouter } from "next/navigation";
-import { useAuth } from "@/src/context/AuthContext";
-import { useStore, useStores } from "@/src/features/shops/queries";
+import { useState, useEffect } from "react";
 import useShop from "@/src/app/hooks/useStore";
 import LogoutButton from "../profile/Logout";
 
@@ -11,42 +7,38 @@ const Header = () => {
   const { getAllStores } = useShop();
   const { error, stores, setLoading, setError, loading } = getAllStores();
 
-  const router = useRouter();
-  const supabase = createClient();
-
-  const handleLogout = async () => {
-    setLoading(true);
-    setError("");
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      setError(error?.message || "Something went wrong");
-      setLoading(false);
-      return;
+  const getCookie = (name: string) => {
+    const cookies = document.cookie.split("; ");
+    for (const cookie of cookies) {
+      if (cookie.startsWith(name + "=")) {
+        return decodeURIComponent(cookie.substring(name.length + 1));
+      }
     }
-    setLoading(false);
-    setError("");
-    router.replace("/login/");
+    return null;
   };
 
+  const [activeStoreId, setActiveStoreId] = useState("");
+
+  useEffect(() => {
+    const cookieStoreId = getCookie("ActiveStore");
+    if (cookieStoreId) setActiveStoreId(cookieStoreId);
+
+    console.log("cookieStoreId", cookieStoreId);
+  }, [activeStoreId]);
   return (
     <>
       <header className="flex justify-between px-5 py-3 border-b">
         <div>
           {stores && (
-            <select name="" id="">
+            <select name="activeStore" id="activeStore" value={activeStoreId}>
               {stores.map((store) => (
-                <option key={store.id}>{store.name}</option>
+                <option key={store.id} value={store.id}>
+                  {store.name}
+                </option>
               ))}
             </select>
           )}
         </div>
-        {/* <button
-          className="cursor-pointer"
-          onClick={handleLogout}
-          disabled={loading}
-        >
-          {loading ? "Processing..." : "Logout"}
-        </button> */}
         <LogoutButton />
       </header>
       {error && <p>{error}</p>}

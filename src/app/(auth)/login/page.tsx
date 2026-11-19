@@ -40,6 +40,8 @@ const LoginPage = () => {
       return;
     }
 
+    console.log("[handleFormSubmit] login redirection", "shop");
+
     router.replace("/shop/");
     router.refresh();
   };

@@ -26,7 +26,7 @@ const StorePage = async ({ params }: PageProps) => {
 
   return (
     <>
-      <h1 className="mb-5">Create Store</h1>
+      <h1 className="mb-5">Store detail</h1>
       <div className="border rounded-xl p-6 relative">
         <Link href={`${slug}/edit`}>Edit</Link>
         <div className="mb-5">

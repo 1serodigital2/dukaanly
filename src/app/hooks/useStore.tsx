@@ -18,7 +18,7 @@ const useShop = () => {
       isError,
     } = useStores(userId ?? "");
 
-    console.log("[Header] data", stores);
+    // console.log("[Header] data", stores);
 
     return {
       stores,
