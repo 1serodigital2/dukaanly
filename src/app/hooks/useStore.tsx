@@ -2,6 +2,7 @@ import { useState } from "react";
 import { createClient } from "@/src/lib/supabase/client";
 import { useAuth } from "@/src/context/AuthContext";
 import { useStores } from "@/src/features/shops/queries";
+import { getCookie } from "@/src/lib/utils/functions";
 
 const useShop = () => {
   const { user } = useAuth();
@@ -32,7 +33,11 @@ const useShop = () => {
     };
   };
 
-  return { getAllStores };
+  const getActiveStoreId = () => {
+    return getCookie("ActiveStore");
+  };
+
+  return { getAllStores, getActiveStoreId };
 };
 
 export default useShop;

@@ -4,8 +4,10 @@ import useShop from "@/src/app/hooks/useStore";
 import Link from "next/link";
 
 const Sidebar = () => {
-  const { getAllStores } = useShop();
+  const { getAllStores, getActiveStoreId } = useShop();
   const { stores, loading } = getAllStores();
+
+  const activeStoreId = getActiveStoreId();
 
   if (loading) return;
 
@@ -19,7 +21,7 @@ const Sidebar = () => {
           <Link href="/admin">Dashboard</Link>
         </li>
         <li>
-          <Link href="#">Dashboard</Link>
+          <Link href={`/shop/${activeStoreId}/members`}>Members</Link>
         </li>
         <li>
           <Link href="#">Dashboard</Link>

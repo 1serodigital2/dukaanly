@@ -7,3 +7,19 @@ export const setCookie = (
   const maxAge = daysToLive * 24 * 60 * 60;
   document.cookie = `${name}=${encodedValue}; max-age=${maxAge}; path=/; SameSite=Lax`;
 };
+
+export const getCookie = (name: string): string | null => {
+  if (typeof document === "undefined") {
+    return null;
+  }
+
+  const cookies = document.cookie.split("; ");
+
+  for (const cookie of cookies) {
+    if (cookie.startsWith(name + "=")) {
+      return decodeURIComponent(cookie.substring(name.length + 1));
+    }
+  }
+
+  return null;
+};

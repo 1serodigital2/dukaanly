@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import useShop from "@/src/app/hooks/useStore";
 import LogoutButton from "../profile/Logout";
-import { setCookie } from "@/src/lib/utils/functions";
+import { getCookie, setCookie } from "@/src/lib/utils/functions";
 
 import { useRouter } from "next/navigation";
 
@@ -11,23 +11,13 @@ const Header = () => {
   const { getAllStores } = useShop();
   const { error, stores, setLoading, setError, loading } = getAllStores();
 
-  const getCookie = (name: string) => {
-    const cookies = document.cookie.split("; ");
-    for (const cookie of cookies) {
-      if (cookie.startsWith(name + "=")) {
-        return decodeURIComponent(cookie.substring(name.length + 1));
-      }
-    }
-    return null;
-  };
-
   const [activeStoreId, setActiveStoreId] = useState("");
 
   useEffect(() => {
     const cookieStoreId = getCookie("ActiveStore");
     if (cookieStoreId) setActiveStoreId(cookieStoreId);
 
-    console.log("cookieStoreId", cookieStoreId);
+    // console.log("cookieStoreId", cookieStoreId);
   }, [activeStoreId]);
 
   const handleChange = (value: string) => {

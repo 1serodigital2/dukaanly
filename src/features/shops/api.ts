@@ -41,7 +41,7 @@ export const getStore = async (id: number) => {
 };
 
 export const getStores = async (id: string) => {
-  console.log("[getStores] triggered with id", id);
+  // console.log("[getStores] triggered with id", id);
 
   const supabase = createClient();
 
