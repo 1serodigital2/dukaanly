@@ -5,7 +5,20 @@ import { Input } from "../form/Input";
 const InviteModal = ({ setShowModal }) => {
   const [invites, setInvites] = useState([{ email: "", role: "" }]);
 
-  const handleInputChange = () => {};
+  const handleInputChange = (
+    inputType: string,
+    value: string,
+    index: number,
+  ) => {
+    setInvites((prevState) =>
+      prevState.map(
+        (invite, i) =>
+          i === index
+            ? { ...invite, [inputType]: value } // Keep existing fields, update only inputType
+            : invite, // Leave all other items untouched
+      ),
+    );
+  };
 
   const InviteMore = () => {
     setInvites((prevState) => {
@@ -13,6 +26,18 @@ const InviteModal = ({ setShowModal }) => {
     });
 
     console.log("[InviteMore] invites", invites);
+  };
+
+  const removeField = (index: number) => {
+    console.log("[removeField] index", index);
+    const latestInvites = invites.filter((_, i) => i != index);
+    setInvites(latestInvites);
+    console.log("[removeField] latestInvites", latestInvites);
+  };
+
+  const handleFormSubmit = (e: React.SubmitEvent) => {
+    e.preventDefault();
+    console.log("[handleFormSubmit] invites", invites);
   };
 
   return (
@@ -33,22 +58,45 @@ const InviteModal = ({ setShowModal }) => {
         >
           Add more
         </button>
-        <form action="">
+        <form action="" onSubmit={handleFormSubmit}>
           {invites.map((invite, index) => (
-            <div className="flex gap-3" id="invite_field">
-              <Input
-                type="email"
-                placeholder="Enter email"
-                name="email"
-                onChange={handleInputChange}
-              />
-              <select name="role" id="">
-                <option value="">--Select Role--</option>
-                <option value="admin">Admin</option>
-                <option value="staff">Staff</option>
-              </select>
+            <div className="flex gap-2 mb-3">
+              <div className="flex gap-3" id="invite_field" key={index}>
+                <Input
+                  type="email"
+                  placeholder="Enter email"
+                  name="email"
+                  onChange={(e) =>
+                    handleInputChange("email", e.target.value, index)
+                  }
+                />
+                <select
+                  name="role"
+                  id=""
+                  className="border rounded"
+                  onChange={(e) =>
+                    handleInputChange("role", e.target.value, index)
+                  }
+                >
+                  <option value="">--Select Role--</option>
+                  <option value="admin">Admin</option>
+                  <option value="staff">Staff</option>
+                </select>
+              </div>
+              {invites.length > 1 && (
+                <button
+                  type="button"
+                  className="border p-3 flex items-center justify-center cursor-pointer"
+                  onClick={() => removeField(index)}
+                >
+                  -
+                </button>
+              )}
             </div>
           ))}
+          <button className="border w-full text-center py-2 rounded mt-4 cursor-pointer">
+            Submit
+          </button>
         </form>
       </div>
     </div>
