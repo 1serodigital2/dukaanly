@@ -1,15 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Input } from "../form/Input";
 
 const InviteModal = ({ setShowModal }) => {
-  const [invites, setInvites] = useState([{ email: "", role: "" }]);
+  const [invites, setInvites] = useState([
+    { id: crypto.randomUUID(), email: "", role: "" },
+  ]);
 
   const handleInputChange = (
     inputType: string,
     value: string,
-    index: number,
+    index?: number,
   ) => {
+    if (index === undefined) return;
     setInvites((prevState) =>
       prevState.map(
         (invite, i) =>
@@ -22,7 +25,7 @@ const InviteModal = ({ setShowModal }) => {
 
   const InviteMore = () => {
     setInvites((prevState) => {
-      return [...prevState, { email: "", role: "" }];
+      return [...prevState, { id: crypto.randomUUID(), email: "", role: "" }];
     });
 
     console.log("[InviteMore] invites", invites);
@@ -30,8 +33,12 @@ const InviteModal = ({ setShowModal }) => {
 
   const removeField = (index: number) => {
     console.log("[removeField] index", index);
+    if (index === null) return;
     const latestInvites = invites.filter((_, i) => i != index);
     setInvites(latestInvites);
+
+    // const targetRow = document.getElementById(`email_${index}`).style.display = 'none';
+
     console.log("[removeField] latestInvites", latestInvites);
   };
 
@@ -60,15 +67,15 @@ const InviteModal = ({ setShowModal }) => {
         </button>
         <form action="" onSubmit={handleFormSubmit}>
           {invites.map((invite, index) => (
-            <div className="flex gap-2 mb-3">
-              <div className="flex gap-3" id="invite_field" key={index}>
+            <div className="flex gap-2 mb-3" key={invite.id} id={`email_${invite.id}`}>
+              <div className="flex gap-3" id="invite_field">
                 <Input
-                  type="email"
+                  type="text"
                   placeholder="Enter email"
                   name="email"
-                  onChange={(e) =>
-                    handleInputChange("email", e.target.value, index)
-                  }
+                  onChange={handleInputChange}
+                  index={index}
+                  value={invite.email}
                 />
                 <select
                   name="role"
@@ -77,6 +84,7 @@ const InviteModal = ({ setShowModal }) => {
                   onChange={(e) =>
                     handleInputChange("role", e.target.value, index)
                   }
+                  value={invite.role}
                 >
                   <option value="">--Select Role--</option>
                   <option value="admin">Admin</option>

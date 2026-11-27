@@ -8,6 +8,7 @@ export const Input = ({
   onChange,
   value,
   placeholder,
+  index
 }: InputProps) => {
   return (
     <div className="flex flex-col w-full">
@@ -15,7 +16,7 @@ export const Input = ({
       <input
         type={type}
         required={required}
-        onChange={(e) => onChange(name, e.target.value)}
+        onChange={(e) => onChange(name, e.target.value, index)}
         className="border rounded min-h-10 px-3"
         value={value}
         placeholder={placeholder}
